@@ -38,9 +38,7 @@ const App: React.FC = () => {
       res = calculateHexagram(method, { numbers: [Number(num1), Number(num2)] });
     }
 
-    // Add inquiry to the result
     res.inquiry = inquiry;
-
     setResult(res);
     const text = await interpretHexagram(res);
     setInterpretation(text || "暫無解析結果。");
@@ -59,7 +57,6 @@ const App: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 md:py-16">
-      {/* Header */}
       <header className="text-center mb-12">
         <h1 className="serif text-5xl font-black text-slate-900 mb-4 tracking-widest">靈曜易占</h1>
         <p className="text-slate-600 font-light italic">觀乎天文，以察時變；觀乎人文，以化成天下。</p>
@@ -67,7 +64,6 @@ const App: React.FC = () => {
 
       {!result ? (
         <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-xl border border-stone-200 overflow-hidden transition-all duration-500">
-          {/* Method Tabs */}
           <div className="flex border-b border-stone-100">
             <button 
               onClick={() => setMethod(DivinationMethod.CONSCIOUSNESS)}
@@ -84,7 +80,6 @@ const App: React.FC = () => {
           </div>
 
           <div className="p-8 md:p-12">
-            {/* Inquiry Field (Common to both methods) */}
             <div className="mb-10">
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 serif">所求之事（選填）</label>
               <textarea 
@@ -106,9 +101,7 @@ const App: React.FC = () => {
                   <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 serif">浮現的字</label>
                     <input 
-                      type="text" 
-                      maxLength={1}
-                      value={char}
+                      type="text" maxLength={1} value={char}
                       onChange={(e) => setChar(e.target.value)}
                       placeholder="例：誠"
                       className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-lg placeholder:text-slate-300"
@@ -120,8 +113,7 @@ const App: React.FC = () => {
                       <a href="https://www.kangxizidian.com/" target="_blank" rel="noopener noreferrer" className="text-[10px] text-amber-600 hover:underline">查詢筆畫 →</a>
                     </div>
                     <input 
-                      type="number" 
-                      value={strokes}
+                      type="number" value={strokes}
                       onChange={(e) => setStrokes(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="請輸入總筆畫"
                       className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-lg placeholder:tracking-wider placeholder:text-slate-300"
@@ -139,10 +131,7 @@ const App: React.FC = () => {
                   <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 serif">第一組數字</label>
                     <input 
-                      type="number" 
-                      min={1}
-                      max={99}
-                      value={num1}
+                      type="number" min={1} max={99} value={num1}
                       onChange={(e) => setNum1(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="1~99"
                       className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-lg placeholder:text-slate-300"
@@ -151,10 +140,7 @@ const App: React.FC = () => {
                   <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 serif">第二組數字</label>
                     <input 
-                      type="number" 
-                      min={1}
-                      max={99}
-                      value={num2}
+                      type="number" min={1} max={99} value={num2}
                       onChange={(e) => setNum2(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="1~99"
                       className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-lg placeholder:text-slate-300"
@@ -174,12 +160,9 @@ const App: React.FC = () => {
           </div>
         </div>
       ) : (
-        /* Result Screen */
         <div className="space-y-8 animate-in fade-in duration-700">
           <div className="flex justify-between items-center bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-stone-100">
              <div className="text-xs text-slate-500 serif">
-                <p>本卦：<span className="text-slate-900 font-bold">{result.name}</span></p>
-                <p>之卦：<span className="text-slate-900 font-bold">{result.changedName}</span></p>
                 <p>時辰：<span className="text-slate-900">{result.divinationTime} ({result.earthlyBranch}時)</span></p>
                 <p>輸入：<span className="text-slate-900">
                   {result.inputDetails.method === DivinationMethod.CONSCIOUSNESS 
@@ -194,12 +177,14 @@ const App: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Visual Column */}
             <div className="lg:col-span-4 bg-white p-8 rounded-3xl shadow-xl border border-stone-100 flex flex-col items-center justify-center space-y-8">
                <div className="flex flex-col items-center gap-6 w-full">
                   <div className="text-center w-full">
                     <p className="text-[10px] text-amber-600 font-bold mb-2 uppercase tracking-widest border-b border-amber-100 pb-1 serif">本卦 (現狀)</p>
-                    <h3 className="serif text-2xl font-bold text-slate-800 mb-4">{result.name}</h3>
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <span className="text-4xl">{result.originalSymbol}</span>
+                      <h3 className="serif text-2xl font-bold text-slate-800">{result.name}</h3>
+                    </div>
                     <div className="flex justify-center">
                       <HexagramVisual lines={result.originalLines} changingLine={result.changingLine} />
                     </div>
@@ -214,7 +199,10 @@ const App: React.FC = () => {
 
                   <div className="text-center w-full">
                     <p className="text-[10px] text-emerald-600 font-bold mb-2 uppercase tracking-widest border-b border-emerald-100 pb-1 serif">之卦 (發展)</p>
-                    <h3 className="serif text-2xl font-bold text-slate-800 mb-4">{result.changedName}</h3>
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <span className="text-4xl">{result.changedSymbol}</span>
+                      <h3 className="serif text-2xl font-bold text-slate-800">{result.changedName}</h3>
+                    </div>
                     <div className="flex justify-center">
                       <HexagramVisual lines={result.changedLines} />
                     </div>
@@ -222,7 +210,6 @@ const App: React.FC = () => {
                </div>
             </div>
 
-            {/* Interpretation Column */}
             <div className="lg:col-span-8 bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-stone-100 min-h-[500px]">
                <div className="flex items-center gap-3 mb-8 border-b border-stone-100 pb-4">
                  <div className="w-2 h-8 bg-amber-600 rounded-full"></div>
@@ -253,7 +240,6 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Footer Info */}
       <footer className="mt-24 text-center text-slate-400 text-xs space-y-2 serif">
         <p>© 2024 靈曜易占 · 玄學與科技的交匯</p>
         <p>易道廣大，無所不包。問卦求的是心平氣和，行為得體。</p>

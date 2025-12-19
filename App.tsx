@@ -11,6 +11,7 @@ const App: React.FC = () => {
   const [strokes, setStrokes] = useState<number | ''>('');
   const [num1, setNum1] = useState<number | ''>('');
   const [num2, setNum2] = useState<number | ''>('');
+  const [inquiry, setInquiry] = useState('');
   
   const [result, setResult] = useState<HexagramResult | null>(null);
   const [interpretation, setInterpretation] = useState<string | null>(null);
@@ -37,6 +38,9 @@ const App: React.FC = () => {
       res = calculateHexagram(method, { numbers: [Number(num1), Number(num2)] });
     }
 
+    // Add inquiry to the result
+    res.inquiry = inquiry;
+
     setResult(res);
     const text = await interpretHexagram(res);
     setInterpretation(text || "暫無解析結果。");
@@ -50,6 +54,7 @@ const App: React.FC = () => {
     setStrokes('');
     setNum1('');
     setNum2('');
+    setInquiry('');
   };
 
   return (
@@ -79,6 +84,17 @@ const App: React.FC = () => {
           </div>
 
           <div className="p-8 md:p-12">
+            {/* Inquiry Field (Common to both methods) */}
+            <div className="mb-10">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 serif">所求之事（選填）</label>
+              <textarea 
+                value={inquiry}
+                onChange={(e) => setInquiry(e.target.value)}
+                placeholder="例如：這項新事業的未來發展如何？"
+                className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-4 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-lg serif placeholder:text-base placeholder:text-slate-300 resize-none h-24"
+              />
+            </div>
+
             {method === DivinationMethod.CONSCIOUSNESS ? (
               <div className="space-y-6">
                 <div className="bg-amber-50/50 p-6 rounded-2xl border border-amber-100 text-amber-900 leading-relaxed text-sm serif">
@@ -95,7 +111,7 @@ const App: React.FC = () => {
                       value={char}
                       onChange={(e) => setChar(e.target.value)}
                       placeholder="例：誠"
-                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-xl placeholder:text-slate-300"
+                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-lg placeholder:text-slate-300"
                     />
                   </div>
                   <div>
@@ -108,7 +124,7 @@ const App: React.FC = () => {
                       value={strokes}
                       onChange={(e) => setStrokes(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="請輸入總筆畫"
-                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-xl placeholder:tracking-wider placeholder:text-slate-300"
+                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-lg placeholder:tracking-wider placeholder:text-slate-300"
                     />
                   </div>
                 </div>
@@ -129,7 +145,7 @@ const App: React.FC = () => {
                       value={num1}
                       onChange={(e) => setNum1(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="1~99"
-                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-xl placeholder:text-slate-300"
+                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-lg placeholder:text-slate-300"
                     />
                   </div>
                   <div>
@@ -141,7 +157,7 @@ const App: React.FC = () => {
                       value={num2}
                       onChange={(e) => setNum2(e.target.value === '' ? '' : Number(e.target.value))}
                       placeholder="1~99"
-                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-xl placeholder:text-slate-300"
+                      className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-center text-xl serif placeholder:text-lg placeholder:text-slate-300"
                     />
                   </div>
                 </div>
@@ -170,6 +186,9 @@ const App: React.FC = () => {
                     ? `字「${result.inputDetails.character}」${result.inputDetails.strokes}畫` 
                     : `數字 ${result.inputDetails.numbers?.join(', ')}`}
                 </span></p>
+                {result.inquiry && (
+                  <p className="mt-1 border-t border-stone-200 pt-1">所求：<span className="text-slate-900 italic">「{result.inquiry}」</span></p>
+                )}
              </div>
              <button onClick={reset} className="text-xs bg-stone-200 hover:bg-stone-300 text-slate-700 px-3 py-1.5 rounded-lg transition-colors serif">重新起卦</button>
           </div>

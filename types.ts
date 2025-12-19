@@ -24,6 +24,7 @@ export interface HexagramResult {
   changedLines: number[];
   divinationTime: string;
   earthlyBranch: string;
+  inquiry?: string;
   inputDetails: {
     method: DivinationMethod;
     character?: string;

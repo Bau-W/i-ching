@@ -178,16 +178,19 @@ const App: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-4 bg-white p-8 rounded-3xl shadow-xl border border-stone-100 flex flex-col items-center justify-center space-y-8">
                <div className="flex flex-col items-center gap-6 w-full">
-                  <div className="text-center w-full">
+                  {/* 本卦區塊 */}
+                  <div className="w-full max-w-[220px]">
                     <p className="text-xs text-amber-600 font-bold mb-3 uppercase tracking-widest border-b border-amber-100 pb-1.5 serif">本卦 (現狀)</p>
-                    <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-4 px-2">
                       <span className="text-5xl">{result.originalSymbol}</span>
-                      <h3 className="serif text-3xl font-black text-slate-800">{result.name}</h3>
+                      <h3 className="serif text-2xl font-black text-slate-800">{result.name}</h3>
                     </div>
                     <div className="flex justify-center">
                       <HexagramVisual lines={result.originalLines} changingLine={result.changingLine} />
                     </div>
-                    <p className="mt-6 text-amber-700 text-xs font-bold bg-amber-50 px-4 py-1.5 rounded-full inline-block serif border border-amber-100">動在第 {result.changingLine} 爻</p>
+                    <div className="mt-4 text-center">
+                      <p className="text-amber-700 text-xs font-bold bg-amber-50 px-4 py-1.5 rounded-full inline-block serif border border-amber-100">動在第 {result.changingLine} 爻</p>
+                    </div>
                   </div>
 
                   <div className="w-full flex items-center justify-center gap-3 text-slate-300">
@@ -196,11 +199,12 @@ const App: React.FC = () => {
                     <div className="h-[1px] flex-1 bg-stone-100"></div>
                   </div>
 
-                  <div className="text-center w-full">
+                  {/* 之卦區塊 */}
+                  <div className="w-full max-w-[220px]">
                     <p className="text-xs text-emerald-600 font-bold mb-3 uppercase tracking-widest border-b border-emerald-100 pb-1.5 serif">之卦 (發展)</p>
-                    <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-4 px-2">
                       <span className="text-5xl">{result.changedSymbol}</span>
-                      <h3 className="serif text-3xl font-black text-slate-800">{result.changedName}</h3>
+                      <h3 className="serif text-2xl font-black text-slate-800">{result.changedName}</h3>
                     </div>
                     <div className="flex justify-center">
                       <HexagramVisual lines={result.changedLines} />
@@ -224,16 +228,31 @@ const App: React.FC = () => {
                  </div>
                ) : (
                  <div className="prose prose-slate max-w-none serif">
-                    {interpretation?.split('\n').map((para, i) => (
-                      <p key={i} className="mb-5 text-slate-700 leading-relaxed text-xl whitespace-pre-wrap">
-                        {para}
-                      </p>
-                    ))}
+                    {interpretation?.split('\n').map((para, i) => {
+                      const isOriginal = para.includes('【經文原文】') || (i === 0 && (para.includes('卦辭') || para.includes('爻辭')));
+                      
+                      if (isOriginal) {
+                        return (
+                          <div key={i} className="mb-10 bg-stone-50 border-y border-stone-200 p-8 -mx-8 md:-mx-12 shadow-inner">
+                            <p className="text-stone-400 text-xs font-bold tracking-widest mb-6 uppercase text-center border-b border-stone-200 pb-2 inline-block mx-auto flex justify-center w-fit">古籍經文原文</p>
+                            <div className="text-slate-800 leading-relaxed text-xl md:text-2xl font-black text-center whitespace-pre-wrap">
+                              {para.replace('1. 【經文原文】：', '').trim()}
+                            </div>
+                          </div>
+                        );
+                      }
+                      
+                      return (
+                        <p key={i} className="mb-5 text-slate-700 leading-relaxed text-xl whitespace-pre-wrap">
+                          {para}
+                        </p>
+                      );
+                    })}
+                    
                     <div className="mt-16 pt-10 border-t border-stone-100 text-slate-500 text-base italic leading-relaxed">
                       解析參考：王思迅《易經白話講座》。以上解析內容由靈曜 AI 輔助生成。
                     </div>
                     
-                    {/* 重新起卦按鈕移至此處 */}
                     <div className="mt-12 flex justify-center">
                       <button 
                         onClick={reset} 
